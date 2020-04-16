@@ -2,27 +2,27 @@
 
 > An AI Project.
 
-#### Build Setup
+#### 构建方法
 
 ``` bash
-# install dependencies
+# 安装依赖包
 npm install
 
-# serve with hot reload at localhost:9080
+# 实时更新预览模式
 npm run dev
 
-# build electron application for production
+# 打包出来
 npm run build
 
-# run unit & end-to-end tests
+# 执行测试程序
 npm test
 
 
-# lint all JS/Vue component files in `src/`
+# src下所有文件格式化
 npm run lint
 
 ```
 
 ---
 
-This project was generated with [electron-vue](https://github.com/SimulatedGREG/electron-vue) using [vue-cli](https://github.com/vuejs/vue-cli). Documentation about the original structure can be found [here](https://simulatedgreg.gitbooks.io/electron-vue/content/index.html).
+该工程基于 [electron-vue](https://github.com/SimulatedGREG/electron-vue)，使用 [vue-cli](https://github.com/vuejs/vue-cli)。 模板相关文档可以在 [这里](https://simulatedgreg.gitbooks.io/electron-vue/content/index.html) 找到。
