@@ -1,9 +1,8 @@
 import {
   SET_BOARD,
   SET_STEPS,
-  RESET_BOARD
-  // BACKWARD,
-  // FORWARS
+  RESET_BOARD,
+  ADD_STEP
 } from '../mutations.js'
 
 const emptyBoard = () => {
@@ -26,7 +25,7 @@ const emptyBoard = () => {
   ]
 }
 
-// const copyBoard = a => a.map(r => r.slice()).slice()
+const copyBoard = a => a.map(r => r.slice()).slice()
 
 const state = {
   board: emptyBoard(),
@@ -38,6 +37,7 @@ const state = {
     }
     */
   ],
+  stepsTail: [],
   fives: []
 }
 
@@ -51,6 +51,19 @@ const mutations = {
   },
   [SET_STEPS] (state, steps) {
     state.steps = steps
+  },
+  [ADD_STEP] (state, {position, role}) {
+    // state.position = position
+    // state.role = role
+    let newBoard = copyBoard(state.board)
+    newBoard[position[0]][position[1]] = role
+    state.board = newBoard
+    const step = {
+      position: position,
+      role: role
+    }
+    state.steps.push(step)
+    state.stepsTail = []// TODO : 找一个更好的清空方法
   }
 }
 
@@ -58,6 +71,9 @@ const actions = {
   someAsyncTask ({ commit }) {
     // do something async
     commit('INCREMENT_MAIN_COUNTER')
+  },
+  [ADD_STEP] ({ commit }, c) {
+    commit([ADD_STEP], c)
   }
 }
 
