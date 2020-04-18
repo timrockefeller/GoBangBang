@@ -2,7 +2,9 @@ import {
   SET_BOARD,
   SET_STEPS,
   RESET_BOARD,
-  ADD_STEP
+  ADD_STEP,
+  BACKWARD,
+  FORWARD
 } from '../mutations.js'
 
 const emptyBoard = () => {
@@ -64,6 +66,12 @@ const mutations = {
     }
     state.steps.push(step)
     state.stepsTail = []// TODO : 找一个更好的清空方法
+  },
+  [BACKWARD] (state, steps) {
+
+  },
+  [FORWARD] (state, steps) {
+
   }
 }
 
