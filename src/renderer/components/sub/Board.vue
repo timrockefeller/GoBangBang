@@ -7,8 +7,8 @@
       <div>
         <div v-for="(row, rowIndex) in board" :key="rowIndex">
           <div
-            v-for="(c, cIndex) in row.filter(c=>!!c)"
-            
+            v-for="(c, cIndex) in row"
+            v-if="!!c"
             :key="cIndex"
             @click="clickChessman"
             :class="'chessman ' + (c === 1 ? 'black ' : 'white ') + (isLast([rowIndex, cIndex]) ? ' last-step' : '') + (isFives([rowIndex, cIndex]) ? ' fives' : '')"
@@ -19,28 +19,29 @@
           </div>
         </div>
       </div>
-      <div
-        v-for="(s, index) in steps.filter(e=>showSteps)"
-        :key="index"
-        @click="clickChessman"
-        :class="'step ' + (s.role === 1 ? 'black' : 'white') + (isFives(s.position) ? ' fives' : '')"
-        :style="{
-          marginTop: (1.5 + s.position[0]*6.53) + '%',
-          marginLeft: (1.5 + s.position[1]*6.53) + '%'
-          }">
-          {{index+1}}
+      <div v-if="showSteps">
+        <div
+          v-for="(s, index) in steps"
+          :key="index"
+          @click="clickChessman"
+          :class="'step ' + (s.role === 1 ? 'black' : 'white') + (isFives(s.position) ? ' fives' : '')"
+          :style="{
+            marginTop: (1.5 + s.position[0]*6.53) + '%',
+            marginLeft: (1.5 + s.position[1]*6.53) + '%'
+            }">
+            {{index+1}}
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { States } from 'vuex'
+import { mapState } from 'vuex'
 export default {
   name: 'board',
-
   computed: {
-    ...States({
+    ...mapState({
       board: state => state.Map.board,
       steps: state => state.Map.steps,
       showSteps: state => state.Config.showSteps,
