@@ -1,8 +1,10 @@
 import * as STATUS from '@/utils/status.js'
+import * as ROLES from '@/utils/roles.js'
+
 const state = {
   title: 'Go邦邦',
   showSteps: true,
-  first: 1,
+  first: ROLES.PLAYER,
   state: STATUS.LOADING
 }
 

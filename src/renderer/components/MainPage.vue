@@ -13,6 +13,7 @@ import Strategy from 'sub/Strategy'
 import {mapState} from 'vuex'
 
 import * as STATUS from '@/utils/status.js'
+import * as ROLES from '@/utils/roles.js'
 import {
   ADD_STEP,
   SET_STATE
@@ -35,7 +36,9 @@ export default {
     },
     set: function (position) {
       if (this.state === STATUS.PLAYING) {
-        this.$store.dispatch([SET_STATE])
+        this._set(position, ROLES.PLAYER)
+        this.$store.dispatch([SET_STATE], STATUS.THINKING)
+        // TODO: call console ai
       }
     }
   }

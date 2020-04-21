@@ -76,9 +76,14 @@ const mutations = {
 }
 
 const actions = {
-  someAsyncTask ({ commit }) {
-    // do something async
-    commit('INCREMENT_MAIN_COUNTER')
+  [RESET_BOARD] ({commit}) {
+    commit(RESET_BOARD)
+  },
+  [SET_BOARD] ({commit}, board) {
+    commit(SET_BOARD, board)
+  },
+  [SET_STEPS] ({commit}, steps) {
+    commit(SET_STEPS, steps)
   },
   [ADD_STEP] ({ commit }, c) {
     commit([ADD_STEP], c)
