@@ -16,7 +16,7 @@ import * as STATUS from '@/utils/status.js'
 import * as ROLES from '@/utils/roles.js'
 import {
   ADD_STEP,
-  SET_STATE
+  SET_STATUS
 } from '@/store/mutations.js'
 
 export default {
@@ -27,7 +27,7 @@ export default {
       return this.$store.state.Config
     },
     ...mapState({
-      state: state => state.Config.state
+      status: state => state.Config.status
     })
   },
   methods: {
@@ -35,9 +35,9 @@ export default {
       this.$store.dispatch([ADD_STEP], p, r)
     },
     set: function (position) {
-      if (this.state === STATUS.PLAYING) {
+      if (this.status === STATUS.PLAYING) {
         this._set(position, ROLES.PLAYER)
-        this.$store.dispatch([SET_STATE], STATUS.THINKING)
+        this.$store.dispatch([SET_STATUS], STATUS.THINKING)
         // TODO: call console ai
       }
     }
