@@ -2,6 +2,8 @@ import * as STATUS from '@/utils/status.js'
 import * as ROLES from '@/utils/roles.js'
 import {
   SET_STATUS,
+  SET_FIRST,
+  GAME_READY,
   GAME_START,
   GAME_TURN
 } from '../mutations.js'
@@ -10,12 +12,27 @@ const state = {
   title: 'Go邦邦',
   showSteps: true,
   first: ROLES.PLAYER,
-  status: STATUS.LOADING
+  status: STATUS.READY
 }
 
 const mutations = {
   [SET_STATUS]: function (state, status) {
     state.status = status
+  },
+  [SET_FIRST]: function (state) {
+    if (state.status === STATUS.READY || state.status === STATUS.CLEANING) {
+      console.log('switch first')
+      if (state.first === ROLES.PLAYER) {
+        state.first = ROLES.CONSOLE
+      } else if (state.first === ROLES.CONSOLE) {
+        state.first = ROLES.PLAYER
+      }
+    }
+  },
+  [GAME_READY]: function (state) {
+    if (state.status === STATUS.LOADING) {
+      state.status = STATUS.READY
+    }
   },
   [GAME_START]: function (state) {
     if (state.status === STATUS.READY) {
@@ -38,11 +55,19 @@ const mutations = {
 }
 
 const actions = {
+  [GAME_READY]: function ({ commit }) {
+    console.log('action logged')
+
+    commit(GAME_READY)
+  },
   [GAME_START]: function ({ commit }) {
-    commit([GAME_START])
+    commit(GAME_START)
   },
   [GAME_TURN]: function ({ commit }) {
-    commit([GAME_TURN])
+    commit(GAME_TURN)
+  },
+  [SET_FIRST]: function ({ commit }) {
+    commit(SET_FIRST)
   }
 }
 

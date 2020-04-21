@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import Board from 'sub/Board'
-import Strategy from 'sub/Strategy'
+import Board from './sub/Board'
+import Strategy from './sub/Strategy'
 
 import {mapState} from 'vuex'
 
@@ -16,6 +16,7 @@ import * as STATUS from '@/utils/status.js'
 import * as ROLES from '@/utils/roles.js'
 import {
   ADD_STEP,
+  GAME_READY,
   GAME_TURN
 } from '@/store/mutations.js'
 
@@ -41,6 +42,9 @@ export default {
         // TODO: 调用AI计算开始
       }
     }
+  },
+  created () {
+    this.$store.dispatch([GAME_READY])
   }
 }
 </script>

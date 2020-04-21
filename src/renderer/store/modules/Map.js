@@ -86,7 +86,7 @@ const actions = {
     commit(SET_STEPS, steps)
   },
   [ADD_STEP] ({ commit }, c) {
-    commit([ADD_STEP], c)
+    commit(ADD_STEP, c)
   }
 }
 

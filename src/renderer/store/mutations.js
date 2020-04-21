@@ -7,6 +7,9 @@ export const RESET_BOARD = 'RESET_BOARD'
 export const ADD_STEP = 'ADD_STEP'
 
 export const SET_STATUS = 'SET_STATUS'
+export const SET_FIRST = 'SET_FIRST'
+
+export const GAME_READY = 'GAME_READY'
 export const GAME_START = 'GAME_START'
 export const GAME_TURN = 'GAME_TURN'
 
