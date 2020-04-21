@@ -15,6 +15,7 @@ import {mapState} from 'vuex'
 import * as STATUS from '@/utils/status.js'
 import * as ROLES from '@/utils/roles.js'
 import {
+  SET_STATUS,
   ADD_STEP,
   GAME_READY,
   GAME_TURN
@@ -44,6 +45,8 @@ export default {
     }
   },
   created () {
+    this.$store.dispatch(SET_STATUS, STATUS.LOADING)
+    // load sth
     this.$store.dispatch(GAME_READY)
   }
 }

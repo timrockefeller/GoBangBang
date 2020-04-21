@@ -1,7 +1,7 @@
 <template>
   <div>
       <el-switch
-        :enabled="isReady"
+        :disabled="!isReady"
         style="display: block"
         v-model="first"
         active-color="#13ce66"
@@ -10,6 +10,7 @@
         inactive-text="玩家先手">
       </el-switch>
       <el-button type="success" @click="gameStart" plain>开始游戏</el-button>
+      <el-button type="danger" @click="gameClean" plain>重置</el-button>
       <el-button  @click="debug" plain>debug</el-button>
   </div>
 </template>
@@ -19,7 +20,9 @@
 import {mapState} from 'vuex'
 
 import {
+  SET_STATUS,
   SET_FIRST,
+  GAME_READY,
   GAME_START
 } from '@/store/mutations.js'
 import * as ROLES from '@/utils/roles.js'
@@ -49,6 +52,11 @@ export default {
   methods: {
     gameStart: function () {
       this.$store.dispatch(GAME_START)
+    },
+    gameClean: function () {
+      this.$store.dispatch(SET_STATUS, STATUS.LOADING)
+      // load sth
+      this.$store.dispatch(GAME_READY)
     },
     debug: function () {
       console.log(this.$store.state.Config)

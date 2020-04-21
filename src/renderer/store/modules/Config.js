@@ -56,6 +56,9 @@ const mutations = {
 }
 
 const actions = {
+  [SET_STATUS]: function ({ commit }, s) {
+    commit(SET_STATUS, s)
+  },
   [GAME_READY]: function ({ commit }) {
     console.log('action logged')
 
