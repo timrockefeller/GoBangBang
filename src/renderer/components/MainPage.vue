@@ -44,7 +44,7 @@ export default {
     }
   },
   created () {
-    this.$store.dispatch([GAME_READY])
+    this.$store.dispatch(GAME_READY)
   }
 }
 </script>

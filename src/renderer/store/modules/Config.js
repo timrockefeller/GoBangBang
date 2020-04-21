@@ -36,12 +36,13 @@ const mutations = {
   },
   [GAME_START]: function (state) {
     if (state.status === STATUS.READY) {
+      console.log('sths')
+
       // 游戏开始时检测配置中哪一方先落子
       if (state.first === ROLES.PLAYER) {
-        state.state = STATUS.PLAYING
-      } else {
-        state.state = STATUS.THINKING
-        // TODO : 调用AI着手第一步，可在上层实现？
+        state.status = STATUS.PLAYING
+      } else if (state.first === ROLES.CONSOLE) {
+        state.status = STATUS.THINKING
       }
     }
   },
