@@ -16,7 +16,7 @@ import * as STATUS from '@/utils/status.js'
 import * as ROLES from '@/utils/roles.js'
 import {
   ADD_STEP,
-  SET_STATUS
+  GAME_TURN
 } from '@/store/mutations.js'
 
 export default {
@@ -37,8 +37,8 @@ export default {
     set: function (position) {
       if (this.status === STATUS.PLAYING) {
         this._set(position, ROLES.PLAYER)
-        this.$store.dispatch([SET_STATUS], STATUS.THINKING)
-        // TODO: call console ai
+        this.$store.dispatch([GAME_TURN])
+        // TODO: 调用AI计算开始
       }
     }
   }
