@@ -26,35 +26,43 @@ import {
 export default {
   name: 'main-page',
   components: {Board, Strategy},
-  data () { return {_pMount: 1} },
+  data () {
+    return {
+      pMount_: 1
+    }
+  },
   computed: {
     config () {
       return this.$store.state.Config
     },
-    status () {
-      let status_ = this.$store.state.Config.status
-      if (status_ === STATUS.THINKING) {
-        let that = this
-        new Promise(function (resolve, reject) {
-          if (that._pMount > 0) {
-            that._pMount--// P
-            resolve(that.$Next())
-          }
-        }).then(function ({position, role}) {
-          if (that.$store.state.Config.status === STATUS.THINKING) {
+    status: {
+      get () {
+        let status_ = this.$store.state.Config.status
+        console.log('mount' + this.pMount_)
+
+        if (status_ === STATUS.THINKING) {
+          let that = this
+          new Promise(function (resolve, reject) {
+            if (that.pMount_ > 0) {
+              that.pMount_--// P
+              console.log('[CONSOLE] Thinking')
+              resolve(that.$Next(that.board, that.options))
+            }
+          }).then(function ({position, role}) {
             that._set(position, role)
             that.$store.dispatch(GAME_TURN)
-          }
-          that._pMount++// V
-        })
+            that.pMount_++// V
+          })
+        }
+        return status_
       }
-      return status_
     },
     isThinking () {
       return this.status === STATUS.THINKING
     },
     ...mapState({
-      board: state => state.Map.board
+      board: state => state.Map.board,
+      options: state => state.Config.options
     })
   },
   methods: {
