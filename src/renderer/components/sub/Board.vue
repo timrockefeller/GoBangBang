@@ -102,6 +102,7 @@ export default {
   border-radius: 50%;
   font-size: 1.2rem;
   user-select: none;
+  box-shadow: 2px 2px 4px #AAA;
 }
 .chessman {
   top: 0;

@@ -1,9 +1,9 @@
 <template>
   <div id="home">
-    <h1 class="title">{{config.title}}</h1>
-    <span v-if="isThinking">思考中...</span>
+    <div style="flex:auto"><h1 class="m-title">{{config.title}}</h1></div>
+    <span class="m-info" v-if="isThinking">思考中...</span>
     <Board @set='set'></Board>
-    <Strategy @gameStart='gameStart'></Strategy>
+    <div><Strategy @gameStart='gameStart'></Strategy></div>
   </div>
 </template>
 
@@ -92,5 +92,11 @@ export default {
 </script>
 
 <style>
-  
+  body {font-family: -apple-system,SF UI Text,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif,SimHei,SimSun; }
+  .m-title{
+      margin: auto;
+  }
+  .m-info {
+      float: right;
+  }
 </style>
