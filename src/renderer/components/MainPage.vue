@@ -26,6 +26,7 @@ import {
 export default {
   name: 'main-page',
   components: {Board, Strategy},
+  data () { return {_pMount: 1} },
   computed: {
     config () {
       return this.$store.state.Config
@@ -35,12 +36,16 @@ export default {
       if (status_ === STATUS.THINKING) {
         let that = this
         new Promise(function (resolve, reject) {
-          resolve(that.$Next())// TODO: 线程锁！！！
+          if (that._pMount > 0) {
+            that._pMount--// P
+            resolve(that.$Next())
+          }
         }).then(function ({position, role}) {
           if (that.$store.state.Config.status === STATUS.THINKING) {
             that._set(position, role)
             that.$store.dispatch(GAME_TURN)
           }
+          that._pMount++// V
         })
       }
       return status_
