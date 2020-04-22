@@ -12,7 +12,11 @@ const state = {
   title: 'Go邦邦',
   showSteps: true,
   first: ROLES.PLAYER,
-  status: STATUS.READY
+  status: STATUS.READY,
+  options: {
+    method: [],
+    depth: 3
+  }
 }
 
 const mutations = {
