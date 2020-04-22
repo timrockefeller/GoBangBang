@@ -1,8 +1,9 @@
 <template>
   <div id="home">
     <h1 class="title">{{config.title}}</h1>
+    <span v-if="isThinking">思考中...</span>
     <Board @set='set'></Board>
-    <Strategy ></Strategy>
+    <Strategy @gameStart='gameStart'></Strategy>
   </div>
 </template>
 
@@ -17,6 +18,7 @@ import * as ROLES from '@/utils/roles.js'
 import {
   SET_STATUS,
   ADD_STEP,
+  GAME_START,
   GAME_READY,
   GAME_TURN
 } from '@/store/mutations.js'
@@ -28,20 +30,44 @@ export default {
     config () {
       return this.$store.state.Config
     },
+    status () {
+      let status_ = this.$store.state.Config.status
+      if (status_ === STATUS.THINKING) {
+        let that = this
+        new Promise(function (resolve, reject) {
+          resolve(that.$Next())// TODO: 线程锁！！！
+        }).then(function ({position, role}) {
+          if (that.$store.state.Config.status === STATUS.THINKING) {
+            that._set(position, role)
+            that.$store.dispatch(GAME_TURN)
+          }
+        })
+      }
+      return status_
+    },
+    isThinking () {
+      return this.status === STATUS.THINKING
+    },
     ...mapState({
-      status: state => state.Config.status
+      board: state => state.Map.board
     })
   },
   methods: {
     _set: function (p, r) {
-      this.$store.dispatch([ADD_STEP], p, r)
+      console.log(p)
+      this.$store.dispatch(ADD_STEP, {position: p, role: r})
     },
     set: function (position) {
       if (this.status === STATUS.PLAYING) {
         this._set(position, ROLES.PLAYER)
-        this.$store.dispatch([GAME_TURN])
+        this.$store.dispatch(GAME_TURN)
         // TODO: 调用AI计算开始
+        console.log('[STATUS] ' + this.status)// TODO: 在dom里调用status来代替这里的更新
       }
+    },
+    gameStart: function () {
+      this.$store.dispatch(GAME_START)
+      console.log('[STATUS]' + this.status)
     }
   },
   created () {

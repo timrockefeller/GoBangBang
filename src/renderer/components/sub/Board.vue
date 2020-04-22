@@ -45,7 +45,8 @@ export default {
       board: state => state.Map.board,
       steps: state => state.Map.steps,
       showSteps: state => state.Config.showSteps,
-      fives: state => state.Map.fives
+      fives: state => state.Map.fives,
+      first: state => state.Config.first
     })
   },
   methods: {

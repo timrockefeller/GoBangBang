@@ -21,23 +21,23 @@ const mutations = {
   },
   [SET_FIRST]: function (state) {
     if (state.status === STATUS.READY || state.status === STATUS.CLEANING) {
-      console.log('switch first')
       if (state.first === ROLES.PLAYER) {
         state.first = ROLES.CONSOLE
       } else if (state.first === ROLES.CONSOLE) {
         state.first = ROLES.PLAYER
       }
+      console.log('[Config] Switch first to ' + ['empty', 'player', 'console'][state.first])
     }
   },
   [GAME_READY]: function (state) {
     if (state.status === STATUS.LOADING) {
+      console.log('[STATUS] Game Ready')
       state.status = STATUS.READY
     }
   },
   [GAME_START]: function (state) {
     if (state.status === STATUS.READY) {
-      console.log('sths')
-
+      console.log('[STATUS] Game Start')
       // 游戏开始时检测配置中哪一方先落子
       if (state.first === ROLES.PLAYER) {
         state.status = STATUS.PLAYING

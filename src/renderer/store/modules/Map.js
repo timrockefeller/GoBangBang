@@ -46,7 +46,7 @@ const state = {
 const mutations = {
   [RESET_BOARD] (state) {
     state.board = emptyBoard()
-    state.step = []
+    state.steps = []
   },
   [SET_BOARD] (state, board) {
     state.board = board
