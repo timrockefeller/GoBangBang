@@ -1,7 +1,7 @@
 <template>
   <div id="home">
     <div style="flex:auto"><h1 class="m-title">{{config.title}}</h1></div>
-    <span class="m-info" v-if="isThinking">思考中...</span>
+    <span class="m-info" v-if="isThinking">少女祈祷中...</span>
     <Board @set='set'></Board>
     <div><Strategy @gameStart='gameStart'></Strategy></div>
   </div>
@@ -38,22 +38,6 @@ export default {
     status: {
       get () {
         let status_ = this.$store.state.Config.status
-        console.log('mount' + this.pMount_)
-
-        if (status_ === STATUS.THINKING) {
-          let that = this
-          new Promise(function (resolve, reject) {
-            if (that.pMount_ > 0) {
-              that.pMount_--// P
-              console.log('[CONSOLE] Thinking')
-              resolve(that.$Next(that.board, that.options))
-            }
-          }).then(function ({position, role}) {
-            that._set(position, role)
-            that.$store.dispatch(GAME_TURN)
-            that.pMount_++// V
-          })
-        }
         return status_
       }
     },
@@ -75,6 +59,21 @@ export default {
         this._set(position, ROLES.PLAYER)
         this.$store.dispatch(GAME_TURN)
         // TODO: 调用AI计算开始
+
+        if (this.status === STATUS.THINKING) {
+          let that = this
+          new Promise(function (resolve, reject) {
+            if (that.pMount_ > 0) {
+              that.pMount_--// P
+              console.log('[CONSOLE] Thinking')
+              resolve(that.$Next(that.board, that.options))
+            }
+          }).then(function ({position, role}) {
+            that._set(position, role)
+            that.$store.dispatch(GAME_TURN)
+            that.pMount_++// V
+          })
+        }
         console.log('[STATUS] ' + this.status)// TODO: 在dom里调用status来代替这里的更新
       }
     },
