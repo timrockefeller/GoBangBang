@@ -4,7 +4,7 @@
  * 并且是只给某一个角色打分
  */
 import * as R from '../roles.js'
-import * as score from '../score.js'
+import score from '../score.js'
 /*
  * 表示在当前位置下一个棋子后的分数
  * 为了性能考虑，增加了一个dir参数，如果没有传入则默认计算所有四个方向，如果传入值，则只计算其中一个方向的值

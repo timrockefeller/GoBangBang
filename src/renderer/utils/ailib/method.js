@@ -1,7 +1,7 @@
 // options为树枝深度deep
 // 负极大值算法-极大极小值的简化版，双方均力求分数极大值
 import * as R from '../roles.js'
-import * as S from '../score.js'
+import S from '../score.js'
 import math from '../math.js'
 import Board from './board.js'
 

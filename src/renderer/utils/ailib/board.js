@@ -1,5 +1,5 @@
 import * as Role from '../roles.js'
-import * as Score from '../score.js'
+import Score from '../score.js'
 import evaluator from './evaluator.js'
 /**
  * @param {Number[][]} board
