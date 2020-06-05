@@ -9,28 +9,43 @@ var SCORE = S
 var MAX = SCORE.FIVE * 10
 var MIN = -1 * MAX
 var count = 0 // 每次思考的节点数
-var ABcut = 1
-
-var boardPut = function (board, p, role) {
-  if (board[p[0]][p[1]] == R.EMPTY) { board[p[0]][p[1]] = role }
-}
-
-var negamax = function (board, role, deep, alpha, beta) {
-  var roots = gen(board, deep)// 生成可下棋子位置的列表
+// var ABcut = 0
+/**
+ *
+ * @param {Board} board
+ * @param {Number[][]} roots
+ * @param {Number} role
+ * @param {Number} deep
+ * @param {Number} alpha
+ * @param {Number} beta
+ */
+var negamax = function (board, roots, role, deep, alpha, beta) {
   for (var i = 0; i < roots.length; i++) {
     var p = roots[i]
-    boardPut(board, p, role) // 假设点
+    board.put(p, role) // 假设点
     var steps = [p]
-    var v = r(deep - 1, -beta, -alpha, R.reverse(role), 1, steps.slice(0))// 迭代,r是包含了剪枝的寻找best_score的算法，跟这个类似
+    var v = r(board, deep - 1, -beta, -alpha, R.reverse(role), 1, steps.slice(0))// 迭代,r是包含了剪枝的寻找best_score的算法，跟这个类似
     v.score *= -1// 负极大值算法精髓
     alpha = Math.max(alpha, v.score)
-    boardPut(board, p, R.EMPTY) // 回溯
-    p.v = v
+    board.remove(p, R.EMPTY) // 回溯
+
+    // return params
+    p.score = v.score
+    p.step = v.step
   }
   return alpha
 }
-var r = function (deep, alpha, beta, role, step, steps) {
-  var _e = evaluate(role)
+/**
+ * @param {Board} board
+ * @param {Number} deep
+ * @param {Number} alpha
+ * @param {Number} beta
+ * @param {Number} role
+ * @param {Number} step
+ * @param {Number[][]} steps
+ */
+var r = function (board, deep, alpha, beta, role, step, steps) {
+  var _e = board.evaluate(role)
   var leaf = {
     score: _e,
     step: step,
@@ -50,27 +65,28 @@ var r = function (deep, alpha, beta, role, step, steps) {
     board.put(p, role)
 
     var _deep = deep - 1
-  }
-  var _steps = steps.slice(0)
-  _steps.push(p)
-  var v = r(_deep, -beta, -alpha, R.reverse(role), step + 1, _steps)
-  v.score *= -1
-  board.remove(p)
-  if (v.score > best.score) {
-    best = v
-  }
-  alpha = Math.max(best.score, alpha)
-  // AB 剪枝
-  // 这里不要直接返回原来的值，因为这样上一层会以为就是这个分，实际上这个节点直接剪掉就好了，根本不用考虑，也就是直接给一个很大的值让他被减掉
-  // 这样会导致一些差不多的节点都被剪掉，但是没关系，不影响棋力
-  // 一定要注意，这里必须是 greatThan 即 明显大于，而不是 greatOrEqualThan 不然会出现很多差不多的有用分支被剪掉，会出现致命错误
-  if (math.greatOrEqualThan(v.score, beta)) {
+
+    var _steps = steps.slice(0)
+    _steps.push(p)
+    var v = r(board, _deep, -beta, -alpha, R.reverse(role), step + 1, _steps)
+    v.score *= -1
+    board.remove(p)
+    if (v.score > best.score) {
+      best = v
+    }
+    alpha = Math.max(best.score, alpha)
+    // AB 剪枝
+    // 这里不要直接返回原来的值，因为这样上一层会以为就是这个分，实际上这个节点直接剪掉就好了，根本不用考虑，也就是直接给一个很大的值让他被减掉
+    // 这样会导致一些差不多的节点都被剪掉，但是没关系，不影响棋力
+    // 一定要注意，这里必须是 greatThan 即 明显大于，而不是 greatOrEqualThan 不然会出现很多差不多的有用分支被剪掉，会出现致命错误
+    if (math.greatOrEqualThan(v.score, beta)) {
     // config.debug && console.log('AB Cut [' + p[0] + ',' + p[1] + ']' + v.score + ' >= ' + beta + '')
-    ABcut++
-    v.score = MAX - 1 // 被剪枝的，直接用一个极大值来记录，但是注意必须比MAX小
-    v.abcut = 1 // 剪枝标记
-    // cache(deep, v) // 别缓存被剪枝的，而且，这个返回到上层之后，也注意都不要缓存
-    return v
+      // ABcut++
+      v.score = MAX - 1 // 被剪枝的，直接用一个极大值来记录，但是注意必须比MAX小
+      // v.abcut = 1 // 剪枝标记
+      // cache(deep, v) // 别缓存被剪枝的，而且，这个返回到上层之后，也注意都不要缓存
+      return v
+    }
   }
   return best
 }
@@ -104,12 +120,12 @@ var gen = function (board, deep) {
  */
 const next = function (_board, options = {}) {
   let depth = options.depth | 3
-  let board = Board(_board)
+  let board = new Board(_board)
 
   let bestScore = 0
   let candidates = gen(board, depth)
   for (var i = 2; i <= depth * 2; i += 2) {
-    bestScore = negamax(candidates, R.CONSOLE, i, MIN, MAX)
+    bestScore = negamax(board, candidates, R.CONSOLE, i, MIN, MAX)
     if (math.greatOrEqualThan(bestScore, SCORE.FIVE)) break
   }// hanyichennb hanyichen nb hanyichen nb hanyi chen nb han yichen nb hanyi chennb han yichennb
   // FIXME
