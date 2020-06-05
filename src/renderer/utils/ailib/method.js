@@ -6,8 +6,8 @@
  */
 //options为树枝深度deep
 //负极大值算法-极大极小值的简化版，双方均力求分数极大值
-import * as R from './roles.js'
-import * as S from './score.js'
+import * as R from '../roles.js'
+import * as S from '../score.js'
 
 var negamax = function(board,role,deep,alpha,beta){
   var best = 0;
@@ -22,6 +22,7 @@ var negamax = function(board,role,deep,alpha,beta){
     board.remove(p)
     p.v = v
   return alpha
+}
 }
 //生成可以下棋子的位置列表
 //因为不需要遍历棋盘所有位置，这个函数主要是把搜索范围放在有棋子的周围一两格范围内
