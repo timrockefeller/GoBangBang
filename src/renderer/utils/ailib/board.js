@@ -56,6 +56,14 @@ let Board = function (board) {
     var score = (role === Role.CONSOLE ? 1 : -1) * (comMaxScore - humMaxScore)
     return score
   }
+  /**
+   * 在 distant 距离内，有 count 个位置非空返回 true，否则返回 false。
+   * @param {Number} x
+   * @param {Number} y
+   * @param {Number} distance
+   * @param {Number} count
+   * @returns {boolean}
+   */
   this.hasNeighbor = function ([x, y], distance, count) {
     var len = this.length
     var startX = x - distance
