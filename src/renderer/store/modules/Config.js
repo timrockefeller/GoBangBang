@@ -2,6 +2,7 @@ import * as STATUS from '@/utils/status.js'
 import * as ROLES from '@/utils/roles.js'
 import {
   SET_STATUS,
+  SET_DEEP,
   SET_FIRST,
   GAME_READY,
   GAME_START,
@@ -33,6 +34,9 @@ const mutations = {
       console.log('[Config] Switch first to ' + ['empty', 'player', 'console'][state.first])
     }
   },
+  [SET_DEEP]: function (state, depth) {
+    state.options.depth = parseInt(depth)
+  },
   [GAME_READY]: function (state) {
     if (state.status === STATUS.LOADING) {
       console.log('[STATUS] Game Ready')
@@ -62,6 +66,10 @@ const mutations = {
 const actions = {
   [SET_STATUS]: function ({ commit }, s) {
     commit(SET_STATUS, s)
+  },
+  [SET_DEEP]: function ({ commit }, s) {
+    console.log('--------' + s)
+    commit(SET_DEEP, s)
   },
   [GAME_READY]: function ({ commit }) {
     console.log('action logged')
