@@ -125,6 +125,7 @@ const next = function (_board, options = {}) {
 
   let bestScore = 0
   let candidates = gen(board, depth)
+  if (!candidates.length) return [7, 7]
   for (var i = 2; i <= depth * 2; i += 2) {
     bestScore = negamax(board, candidates, R.CONSOLE, i, MIN, MAX)
     if (math.greatOrEqualThan(bestScore, SCORE.FIVE)) break

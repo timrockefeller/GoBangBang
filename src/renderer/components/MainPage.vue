@@ -50,6 +50,22 @@ export default {
     })
   },
   methods: {
+    com: function () {
+      if (this.status === STATUS.THINKING) {
+        let that = this
+        new Promise(function (resolve, reject) {
+          if (that.pMount_ > 0) {
+            that.pMount_--// P
+            console.log('[CONSOLE] Thinking')
+            resolve(that.$Next(that.board, that.options))
+          }
+        }).then(function ({position, role}) {
+          that._set(position, role)
+          that.$store.dispatch(GAME_TURN)
+          that.pMount_++// V
+        })
+      }
+    },
     _set: function (p, r) {
       console.log(p)
       this.$store.dispatch(ADD_STEP, {position: p, role: r})
@@ -59,27 +75,16 @@ export default {
         this._set(position, ROLES.PLAYER)
         this.$store.dispatch(GAME_TURN)
         // TODO: 调用AI计算开始
-
-        if (this.status === STATUS.THINKING) {
-          let that = this
-          new Promise(function (resolve, reject) {
-            if (that.pMount_ > 0) {
-              that.pMount_--// P
-              console.log('[CONSOLE] Thinking')
-              resolve(that.$Next(that.board, that.options))
-            }
-          }).then(function ({position, role}) {
-            that._set(position, role)
-            that.$store.dispatch(GAME_TURN)
-            that.pMount_++// V
-          })
-        }
+        this.com()
         console.log('[STATUS] ' + this.status)// TODO: 在dom里调用status来代替这里的更新
       }
     },
     gameStart: function () {
       this.$store.dispatch(GAME_START)
       console.log('[STATUS]' + this.status)
+      if (this.config.first === ROLES.CONSOLE) {
+        this.com()
+      }
     }
   },
   created () {
