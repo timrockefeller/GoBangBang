@@ -1,9 +1,3 @@
-/**
- *  策略处理
- * @param {Number[][]} board
- * @param {Object} options
- * @returns {Number[]}
- */
 // options为树枝深度deep
 // 负极大值算法-极大极小值的简化版，双方均力求分数极大值
 import * as R from '../roles.js'
@@ -106,10 +100,14 @@ var hasNeighbor = function (board, [x, y], distance, count) {
   }
   return false
 }
-
-
-
-const next = function (board, options = {}) {
+/**
+ *  策略处理
+ * @param {Number[][]} board
+ * @param {Object} options
+ * @returns {Number[]}
+ */
+const next = function (_board, options = {}) {
+  let board = Board(_board)
   var p = [0, 0]
   // board.push(p,role) 等一个有缘人来补充board类，p是位置
   // return p
