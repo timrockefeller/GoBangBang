@@ -9,6 +9,7 @@
         active-text="电脑先手"
         inactive-text="玩家先手">
       </el-switch>
+      思考层数：<el-input-number :disabled="!isReady" v-model="depth" :min="2" :max="6" label="思考层数"></el-input-number>
       <el-button type="success" @click="$emit('gameStart')" plain>开始游戏</el-button>
       <el-button type="danger" @click="gameClean" plain>重置</el-button>
       <el-button  @click="debug" plain>debug</el-button>
@@ -21,6 +22,7 @@ import {mapState} from 'vuex'
 
 import {
   SET_STATUS,
+  SET_DEEP,
   SET_FIRST,
   GAME_READY,
   RESET_BOARD
@@ -40,6 +42,14 @@ export default {
       },
       set (value) {
         this.$store.dispatch(SET_FIRST)
+      }
+    },
+    depth: {
+      get () {
+        return this.$store.state.Config.options.depth
+      },
+      set (depth) {
+        this.$store.commit(SET_DEEP, depth)
       }
     },
     ...mapState({
