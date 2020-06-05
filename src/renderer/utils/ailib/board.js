@@ -15,8 +15,6 @@ class Board {
 
   comMaxScore = 0
   humMaxScore = 0
-  comScore
-  humScore
   /**
      * @param {Number[]} p
      * @param {Number} role
@@ -58,7 +56,6 @@ class Board {
     for (var i = 0; i < 15; i++) { // 遍历整个棋盘获取所有空位点分数值的总和
       for (var j = 0; j < 15; j++) {
         if (this.board[i][j] === Role.CONSOLE) {
-          // TODO
           comMaxScore += this.GainScore(this.comScore[i][j])
         } else if (this.board[i][j] === Role.PLAYER) {
           humMaxScore += this.GainScore(this.humScore[i][j])

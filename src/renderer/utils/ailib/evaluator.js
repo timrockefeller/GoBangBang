@@ -3,8 +3,8 @@
  * 这个是专门给某一个位置打分的，不是给整个棋盘打分的
  * 并且是只给某一个角色打分
  */
-import R from '../roles.js'
-import score from '../score.js'
+import * as R from '../roles.js'
+import * as score from '../score.js'
 /*
  * 表示在当前位置下一个棋子后的分数
  * 为了性能考虑，增加了一个dir参数，如果没有传入则默认计算所有四个方向，如果传入值，则只计算其中一个方向的值
@@ -39,7 +39,7 @@ var s = function (b, px, py, role, dir) {
         break
       }
       var t = board[px][i]
-      if (t === R.empty) {
+      if (t === R.EMPTY) {
         if (empty === -1 && i < len - 1 && board[px][i + 1] === role) {
           empty = count
           continue
@@ -62,7 +62,7 @@ var s = function (b, px, py, role, dir) {
         break
       }
       t = board[px][i]
-      if (t === R.empty) {
+      if (t === R.EMPTY) {
         if (empty === -1 && i > 0 && board[px][i - 1] === role) {
           empty = 0 // 注意这里是0，因为是从右往左走的
           continue
@@ -81,10 +81,8 @@ var s = function (b, px, py, role, dir) {
     }
 
     count += secondCount
-
-    b.scoreCache[role][0][px][py] = countToScore(count, block, empty)
   }
-  result += b.scoreCache[role][0][px][py]
+  result += countToScore(count, block, empty)
 
   if (dir === undefined || dir === 1) {
     // |
@@ -96,7 +94,7 @@ var s = function (b, px, py, role, dir) {
         break
       }
       t = board[i][py]
-      if (t === R.empty) {
+      if (t === R.EMPTY) {
         if (empty === -1 && i < len - 1 && board[i + 1][py] === role) {
           empty = count
           continue
@@ -119,7 +117,7 @@ var s = function (b, px, py, role, dir) {
         break
       }
       t = board[i][py]
-      if (t === R.empty) {
+      if (t === R.EMPTY) {
         if (empty === -1 && i > 0 && board[i - 1][py] === role) {
           empty = 0
           continue
@@ -138,10 +136,8 @@ var s = function (b, px, py, role, dir) {
     }
 
     count += secondCount
-
-    b.scoreCache[role][1][px][py] = countToScore(count, block, empty)
   }
-  result += b.scoreCache[role][1][px][py]
+  result += countToScore(count, block, empty)
 
   // \
   if (dir === undefined || dir === 2) {
@@ -155,7 +151,7 @@ var s = function (b, px, py, role, dir) {
         break
       }
       t = board[x][y]
-      if (t === R.empty) {
+      if (t === R.EMPTY) {
         if (empty === -1 && (x < len - 1 && y < len - 1) && board[x + 1][y + 1] === role) {
           empty = count
           continue
@@ -180,7 +176,7 @@ var s = function (b, px, py, role, dir) {
         break
       }
       t = board[x][y]
-      if (t === R.empty) {
+      if (t === R.EMPTY) {
         if (empty === -1 && (x > 0 && y > 0) && board[x - 1][y - 1] === role) {
           empty = 0
           continue
@@ -199,10 +195,8 @@ var s = function (b, px, py, role, dir) {
     }
 
     count += secondCount
-
-    b.scoreCache[role][2][px][py] = countToScore(count, block, empty)
   }
-  result += b.scoreCache[role][2][px][py]
+  result += countToScore(count, block, empty)
 
   // /
   if (dir === undefined || dir === 3) {
@@ -216,7 +210,7 @@ var s = function (b, px, py, role, dir) {
         break
       }
       t = board[x][y]
-      if (t === R.empty) {
+      if (t === R.EMPTY) {
         if (empty === -1 && (x < len - 1 && y < len - 1) && board[x + 1][y - 1] === role) {
           empty = count
           continue
@@ -241,7 +235,7 @@ var s = function (b, px, py, role, dir) {
         break
       }
       t = board[x][y]
-      if (t === R.empty) {
+      if (t === R.EMPTY) {
         if (empty === -1 && (x > 0 && y > 0) && board[x - 1][y + 1] === role) {
           empty = 0
           continue
@@ -260,10 +254,8 @@ var s = function (b, px, py, role, dir) {
     }
 
     count += secondCount
-
-    b.scoreCache[role][3][px][py] = countToScore(count, block, empty)
   }
-  result += b.scoreCache[role][3][px][py]
+  result += countToScore(count, block, empty)
 
   return result
 }

@@ -8,7 +8,7 @@ import Board from './board.js'
 var SCORE = S
 var MAX = SCORE.FIVE * 10
 var MIN = -1 * MAX
-var count = 0 // 每次思考的节点数
+// var count = 0 // 每次思考的节点数
 // var ABcut = 0
 /**
  *
@@ -59,7 +59,8 @@ var r = function (board, deep, alpha, beta, role, step, steps) {
     step: step,
     steps: steps
   }
-  var points = gen(role, count > 10 ? step > 1 : step > 3, step > 1)
+  // var points = gen(role, count > 10 ? step > 1 : step > 3, step > 1)
+  var points = gen(board, deep)
   for (var i = 0; i < points.length; i++) {
     var p = points[i]
     board.put(p, role)
