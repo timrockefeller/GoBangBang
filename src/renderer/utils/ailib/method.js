@@ -28,7 +28,6 @@ var negamax = function (board, roots, role, deep, alpha, beta) {
     v.score *= -1// 负极大值算法精髓
     alpha = Math.max(alpha, v.score)
     board.remove(p, R.EMPTY) // 回溯
-
     // return params
     p.score = v.score
     p.step = v.step
@@ -76,6 +75,7 @@ var r = function (board, deep, alpha, beta, role, step, steps) {
       best = v
     }
     alpha = Math.max(best.score, alpha)
+
     // AB 剪枝
     // 这里不要直接返回原来的值，因为这样上一层会以为就是这个分，实际上这个节点直接剪掉就好了，根本不用考虑，也就是直接给一个很大的值让他被减掉
     // 这样会导致一些差不多的节点都被剪掉，但是没关系，不影响棋力

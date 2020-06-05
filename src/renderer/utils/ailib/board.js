@@ -25,9 +25,9 @@ class Board {
      */
   put ([x, y], role) {
     if (role === Role.CONSOLE) {
-      this.comScore[x][y] = evaluator(this, x, y, role, 0)
+      this.comScore[x][y] = evaluator(this, x, y, role)
     } else {
-      this.humScore[x][y] = evaluator(this, x, y, role, 0)
+      this.humScore[x][y] = evaluator(this, x, y, role)
     }
     if (x < this.length && y < this.length) {
       this.board[x][y] = role
@@ -60,9 +60,9 @@ class Board {
     for (var i = 0; i < 15; i++) { // 遍历整个棋盘获取所有空位点分数值的总和
       for (var j = 0; j < 15; j++) {
         if (this.board[i][j] === Role.CONSOLE) {
-          comMaxScore += this.GainScore(this.comScore[i][j])
+          comMaxScore += this.GainScore(this.comScore[i][j]) | 0
         } else if (this.board[i][j] === Role.PLAYER) {
-          humMaxScore += this.GainScore(this.humScore[i][j])
+          humMaxScore += this.GainScore(this.humScore[i][j]) | 0
         }
       }
     }
