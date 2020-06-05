@@ -18,12 +18,12 @@ export default {
   BLOCKED_FOUR: 10000
 }
 
-// 总分数
-var score = {
-  TWO: 'TWO', // 活二
-  TWO_THREE: 'TWO_THREE', // 双三
-  BLOCK_FOUR: 'BLOCKED_FOUR', // 冲四
-  FOUR_THREE: 'FOUR_THREE', // 冲四活三
-  FOUR: 'FOUR', // 活四
-  FIVE: 'FIVE' // 连五
-}
+// // 总分数
+// var score = {
+//   TWO: 'TWO', // 活二
+//   TWO_THREE: 'TWO_THREE', // 双三
+//   BLOCK_FOUR: 'BLOCKED_FOUR', // 冲四
+//   FOUR_THREE: 'FOUR_THREE', // 冲四活三
+//   FOUR: 'FOUR', // 活四
+//   FIVE: 'FIVE' // 连五
+// }

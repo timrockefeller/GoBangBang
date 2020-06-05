@@ -8,21 +8,64 @@
 // 负极大值算法-极大极小值的简化版，双方均力求分数极大值
 import * as R from '../roles.js'
 import * as S from '../score.js'
+import * as math from '../math.js'
+import Board from './board.js'
+
+var SCORE = S
+var MAX = SCORE.FIVE * 10
+var MIN = -1 * MAX
+var count = 0 // 每次思考的节点数
+
+var boardPut = function (board, p, role) {
+  if (board[p[0]][p[1]] == R.EMPTY) { board[p[0]][p[1]] = role }
+}
 
 var negamax = function (board, role, deep, alpha, beta) {
-  var best = 0
-  var point = gen(board, deep)
-  for (var i = 0; i < point.length; i++) {
-    var p = point[i]
-    board.put(p, role)
+  var roots = gen(board, deep)// 生成可下棋子位置的列表
+  for (var i = 0; i < roots.length; i++) {
+    var p = roots[i]
+    boardPut(board, p, role) // 假设点
     var steps = [p]
-    var v = r(deep - 1, -beta, -alpha, R.reverse(role), 1, steps.slice(0), 0)// 迭代,r是包含了剪枝的寻找best_score的算法，跟这个类似
+    var v = r(deep - 1, -beta, -alpha, R.reverse(role), 1, steps.slice(0))// 迭代,r是包含了剪枝的寻找best_score的算法，跟这个类似
     v.score *= -1// 负极大值算法精髓
     alpha = Math.max(alpha, v.score)
-    board.remove(p)
+    boardPut(board, p, R.EMPTY) // 回溯
     p.v = v
-    return alpha
   }
+  return alpha
+}
+var r = function (deep, alpha, beta, role, step, steps) {
+  var _e = evaluate(role)
+  var leaf = {
+    score: _e,
+    step: step,
+    steps: steps
+  }
+  if (deep <= 0 || math.greatOrEqualThan(_e, S.FIVE) || math.littleOrEqualThan(_e, -S.FIVE)) {
+    return leaf
+  }
+  var best = {
+    score: MIN,
+    step: step,
+    steps: steps
+  }
+  var points = gen(role, count > 10 ? step > 1 : step > 3, step > 1)
+  for (var i = 0; i < points.length; i++) {
+    var p = points[i]
+    board.put(p, role)
+
+    var _deep = deep - 1
+  }
+  var _steps = steps.slice(0)
+  _steps.push(p)
+  var v = r(_deep, -beta, -alpha, R.reverse(role), step + 1, _steps)
+  v.score *= -1
+  board.remove(p)
+  if (v.score > best.score) {
+    best = v
+  }
+  alpha = Math.max(best.score, alpha)
+  return best
 }
 // 生成可以下棋子的位置列表
 // 因为不需要遍历棋盘所有位置，这个函数主要是把搜索范围放在有棋子的周围一两格范围内
@@ -64,39 +107,7 @@ var hasNeighbor = function (board, [x, y], distance, count) {
   return false
 }
 
-var evaluate = function (role) { // 获取当前操作对象
-  let comMaxScore = 0
-  let humMaxScore = 0
-  var board = that.board// 需要获取当前棋盘信息,不知道在哪定义的，先放一个在这里.jpg
-  for (var i = 0; i < board.length; i++) { // 遍历整个棋盘获取所有空位点分数值的总和
-    for (var j = 0; j < board[i].length; j++) {
-      if (board[i][j] == R.CONSOLE) {
-        comMaxScore += GainScore(comScore[i][j])
-      } else if (board[i][j] == R.PLAYER) {
-        humMaxScore += GainScore(humScore[i][j])
-      }
-    }
-  }
-  var score = (role == R.CONSOLE ? 1 : -1) * (comMaxScore - humMaxScore)
-  return score
-}
-// 冲四的分其实肯定比活三高，但是如果这样的话容易形成盲目冲四的问题，所以如果发现电脑有无意义的冲四，则将分数降低到和活三一样
-// 而对于冲四活三这种杀棋，则将分数提高。
-// iamcopycatyeah
-var GainScore = function (type) {
-  if (type < S.FOUR && type >= S.BLOCKED_FOUR) {
-    if (type >= S.BLOCKED_FOUR && type < (S.BLOCKED_FOUR + S.THREE)) {
-      // 单独冲四，意义不大
-      return S.THREE
-    } else if (type >= S.BLOCKED_FOUR + S.THREE && type < S.BLOCKED_FOUR * 2) {
-      return S.FOUR // 冲四活三，比双三分高，相当于自己形成活四
-    } else {
-      // 双冲四 比活四分数也高
-      return S.FOUR * 2
-    }
-  }
-  return type
-}
+
 
 const next = function (board, options = {}) {
   var p = [0, 0]
