@@ -9,8 +9,12 @@ class Board {
   constructor (board) {
     this.board = board
     this.length = board.length
-    this.comScore = Array(Array(this.length))
-    this.humScore = Array(Array(this.length))
+    this.comScore = new Array(this.length)
+    this.humScore = new Array(this.length)
+    for (let i = 0; i < this.length; i++) {
+      this.comScore[i] = new Array(this.length)
+      this.humScore[i] = new Array(this.length)
+    }
   }
 
   comMaxScore = 0
