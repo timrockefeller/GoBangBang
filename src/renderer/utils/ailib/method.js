@@ -1,5 +1,4 @@
 // options为树枝深度deep
-// 负极大值算法-极大极小值的简化版，双方均力求分数极大值
 import * as R from '../roles.js'
 import S from '../score.js'
 import math from '../math.js'
@@ -19,13 +18,15 @@ var MIN = -1 * MAX
  * @param {Number} alpha
  * @param {Number} beta
  */
+// 负极大值算法-极大极小值的简化版，双方均力求分数极大值
 var negamax = function (board, roots, role, deep, alpha, beta) {
   for (var i = 0; i < roots.length; i++) {
     var p = roots[i]
     board.put(p, role) // 假设点
     var steps = [p]
-    var v = r(board, deep - 1, -beta, -alpha, R.reverse(role), 1, steps.slice(0))// 迭代,r是包含了剪枝的寻找best_score的算法，跟这个类似
-    v.score *= -1// 负极大值算法精髓
+    var v = r(board, deep - 1, -beta, -alpha, R.reverse(role), 1, steps.slice(0))
+    // 迭代,r是包含了剪枝的寻找best_score的算法，跟negamax函数类似
+    v.score *= -1// 负极大值算法的精髓
     alpha = Math.max(alpha, v.score)
     board.remove(p, R.EMPTY) // 回溯
     // return params
@@ -50,6 +51,7 @@ var r = function (board, deep, alpha, beta, role, step, steps) {
     step: step,
     steps: steps
   }
+  // 若剩余深度小于等于0或找到必胜节点，则此节点为叶节点，返回
   if (deep <= 0 || math.greatOrEqualThan(_e, S.FIVE) || math.littleOrEqualThan(_e, -S.FIVE)) {
     return leaf
   }
@@ -126,29 +128,24 @@ const next = function (_board, options = {}) {
 
   let bestScore = 0
   let candidates = gen(board, depth)
-  if (!candidates.length) return [7, 7]
-  for (var i = 2; i <= depth; i += 2) {
+  if (!candidates.length) return [7, 7]// 若是电脑先起手的话直接下在7,7的位置即可
+  for (var i = 2; i <= depth; i += 2) { // 由于采用了负极大值搜索算法，故每次搜索都跳过一层
     bestScore = negamax(board, candidates, R.CONSOLE, i, MIN, MAX)
     if (math.greatOrEqualThan(bestScore, SCORE.FIVE)) break
-  }// hanyichennb hanyichen nb hanyichen nb hanyi chen nb han yichen nb hanyi chennb han yichennb
-  // FIXME
-  // candidates[i] = [x,y] => [x, y, score, step]
+  }
   candidates.sort(function (a, b) {
     if (math.equal(a.score, b.score)) {
       // 大于零是优势，尽快获胜，因此取步数短的
       // 小于0是劣势，尽量拖延，因此取步数长的
       if (a.score >= 0) {
         if (a.step !== b.step) return a.step - b.step
-        else return b.score - a.score // 否则 选取当前分最高的（直接评分)
+        else return b.score - a.score // 否则就选取当前分最高的
       } else {
         if (a.step !== b.step) return b.step - a.step
-        else return b.score - a.score // 否则 选取当前分最高的（直接评分)
+        else return b.score - a.score // 否则就选取当前分最高的
       }
     } else return (b.score - a.score)
   })
-  // board.push(p,role) 等一个有缘人来补充board类，p是位置
-  // return p
-  // if (count <=0 ) p=[7,7] return p  要是电脑先起手的话直接下在7,7的位置即可
   return candidates[0]
 }
 
