@@ -106,7 +106,7 @@ var gen = function (board, deep) {
       if (board.board[i][j] === R.EMPTY) {
         if (board.hasNeighbor([i, j], 1, 1)) { // 必须是有邻居的才行
           neighbors.push([i, j])
-        } else if (deep >= 2 && board.hasNeighbor([i, j], 1, 1)) {
+        } else if (deep >= 2 && board.hasNeighbor([i, j], 2, 2)) {
           nextNeighbors.push([i, j])
         }
       }
