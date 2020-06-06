@@ -60,6 +60,7 @@ var r = function (board, deep, alpha, beta, role, step, steps) {
   }
   // var points = gen(role, count > 10 ? step > 1 : step > 3, step > 1)
   var points = gen(board, deep)
+  if (!points.length) return leaf
   for (var i = 0; i < points.length; i++) {
     var p = points[i]
     board.put(p, role)
@@ -80,11 +81,11 @@ var r = function (board, deep, alpha, beta, role, step, steps) {
     // 这里不要直接返回原来的值，因为这样上一层会以为就是这个分，实际上这个节点直接剪掉就好了，根本不用考虑，也就是直接给一个很大的值让他被减掉
     // 这样会导致一些差不多的节点都被剪掉，但是没关系，不影响棋力
     // 一定要注意，这里必须是 greatThan 即 明显大于，而不是 greatOrEqualThan 不然会出现很多差不多的有用分支被剪掉，会出现致命错误
-    if (math.greatOrEqualThan(v.score, beta)) {
+    if (math.greatThan(v.score, beta)) {
     // config.debug && console.log('AB Cut [' + p[0] + ',' + p[1] + ']' + v.score + ' >= ' + beta + '')
-      // ABcut++
+      //      ABcut++
       v.score = MAX - 1 // 被剪枝的，直接用一个极大值来记录，但是注意必须比MAX小
-      // v.abcut = 1 // 剪枝标记
+      //      v.abcut = 1 // 剪枝标记
       // cache(deep, v) // 别缓存被剪枝的，而且，这个返回到上层之后，也注意都不要缓存
       return v
     }
@@ -105,7 +106,7 @@ var gen = function (board, deep) {
       if (board.board[i][j] === R.EMPTY) {
         if (board.hasNeighbor([i, j], 1, 1)) { // 必须是有邻居的才行
           neighbors.push([i, j])
-        } else if (deep >= 2 && board.hasNeighbor([i, j], 2, 2)) {
+        } else if (deep >= 2 && board.hasNeighbor([i, j], 1, 1)) {
           nextNeighbors.push([i, j])
         }
       }
@@ -120,13 +121,13 @@ var gen = function (board, deep) {
  * @returns {Number[]}
  */
 const next = function (_board, options = {}) {
-  let depth = options.depth | 3
+  let depth = options.depth
   let board = new Board(_board)
 
   let bestScore = 0
   let candidates = gen(board, depth)
   if (!candidates.length) return [7, 7]
-  for (var i = 2; i <= depth * 2; i += 2) {
+  for (var i = 2; i <= depth; i += 2) {
     bestScore = negamax(board, candidates, R.CONSOLE, i, MIN, MAX)
     if (math.greatOrEqualThan(bestScore, SCORE.FIVE)) break
   }// hanyichennb hanyichen nb hanyichen nb hanyi chen nb han yichen nb hanyi chennb han yichennb
